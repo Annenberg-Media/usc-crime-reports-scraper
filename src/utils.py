@@ -1,8 +1,9 @@
 import os
 import typing
 from pathlib import Path
-
+import json
 import requests
+from parse import read_and_parse
 from rich import print
 from documentcloud import DocumentCloud
 from documentcloud.exceptions import APIError
@@ -64,15 +65,20 @@ def upload_pdf(
     if verbose:
         print(f"Uploading {pdf_path}")
     try:
-        document = client.documents.upload(
-            pdf_path,
-            title=f"{pdf_name.replace('.pdf', '')}",
-            project=project_id.split("-")[-1],
-            access="public",
-            data={"uid": pdf_name},
-        )
-        return document.canonical_url, True
+        # document = client.documents.upload(
+        #     pdf_path,
+        #     title=f"{pdf_name.replace('.pdf', '')}",
+        #     project=project_id.split("-")[-1],
+        #     access="public",
+        #     data={"uid": pdf_name},
+        # )
+
+        # return document.canonical_url, True
+        json_data = parse.read_and_parse(pdf_path)
+        ##upload_json(json_data)
     except APIError as e:
         if verbose:
             print(f"API error {e}")
         return None, False
+    
+##def upload_json(json_data):
