@@ -1,3 +1,51 @@
+# New README
+Hello brave person at Annenberg Media, who tries to venture into USC DPS reports project.  
+  
+### Clone the repository
+You know how to do this (probably)
+
+### Create a virtual environment
+It's just neater.  
+In the project's root directory:
+
+```
+python -m venv venv
+```
+
+### Start using the virtual environment
+In the project root directory:  
+```
+source venv/bin/activate
+```
+
+### Install requirements using venv's pip
+We use our current venv's pip (instead of system-wide pip) to install packages:
+```
+venv/bin/pip install requests
+```
+
+```
+venv/bin/pip install pypdf
+```
+
+```
+venv/bin/pip install python-decouple
+```
+
+### Then use venv's python
+We now use our current venv's python (instead of system-wide python) to run:
+```
+venv/bin/python src/test_api.py
+```
+
+-----
+-----
+-----
+-----
+-----
+-----
+
+## OLD README BELOW
 A GitHub Action workflow for automating the collection of [crime and fire logs](https://dps.usc.edu/alerts/log/) posted by the University of Southern California's Department of Public Safety.
 
 ## Links
