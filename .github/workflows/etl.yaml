@@ -45,5 +45,5 @@ jobs:
           git config pull.rebase false
           git pull origin $GITHUB_REF
           git add ./pdfs
-          git commit -m "Added latest PDF" --author="palewire <palewire@users.noreply.github.com>" && git push || true
+          git commit -m "Added latest PDF" --author="gautamrajan <gautamrajan@users.noreply.github.com>" && git push || true
         shell: bash
