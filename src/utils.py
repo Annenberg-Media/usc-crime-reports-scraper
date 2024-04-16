@@ -14,6 +14,8 @@ THIS_DIR = Path(__file__).parent.absolute()
 ROOT_DIR = THIS_DIR.parent
 PDF_DIR = ROOT_DIR / "pdfs"
 
+MONGO_KEY = os.getenv("MONGO_KEY")
+assert MONGO_KEY
 
 def format_pdf_url(dt):
     """Format the provided datetime to fit the PDF URL expected on our source."""
@@ -45,49 +47,31 @@ def upload_pdf(
     # Make sure it exists
     assert pdf_path.exists()
 
-    # Connect to DocumentCloud
-    client = DocumentCloud(
-        os.getenv("DOCUMENTCLOUD_USER"), os.getenv("DOCUMENTCLOUD_PASSWORD")
-    )
+    # Parse the PDF to JSON
+    json_data = read_and_parse(pdf_path)
+    data = json.loads(json_data)
 
-    # Search to see if it's already up there
-    project_id = os.getenv("DOCUMENTCLOUD_PROJECT_ID")
-    assert project_id
-    query = f"+project:{project_id} AND data_uid:{pdf_name}"
-    search = client.documents.search(query)
+    #Check if document exists in MongoDB
+    exists = check_exists(data)
 
     # If it is, we're done
-    if len(list(search)) > 0:
-        if verbose:
-            print(f"{pdf_name} already uploaded")
-        return search[0].canonical_url, False
+    if exists:
+        print(f"{pdf_name} already uploaded")
+        return False
 
     # If it isn't, upload it now
-    if verbose:
+    else:
         print(f"Uploading {pdf_path}")
     try:
-        # document = client.documents.upload(
-        #     pdf_path,
-        #     title=f"{pdf_name.replace('.pdf', '')}",
-        #     project=project_id.split("-")[-1],
-        #     access="public",
-        #     data={"uid": pdf_name},
-        # )
-
-        # return document.canonical_url, True
         json_data = read_and_parse(pdf_path)
-        upload_json(json_data)
+        upload_json(data)
     except APIError as e:
         if verbose:
             print(f"API error {e}")
         return None, False
     
-def upload_json(json_data):
+def upload_json(data):
     url = f"https://data.mongodb-api.com/app/data-wpkwm/endpoint/data/v1/action/insertMany"
-    data = json.loads(json_data)
-    MONGO_KEY = os.getenv("MONGO_KEY")
-    assert MONGO_KEY
-    # print(MONGO_KEY)
     headers = {
         "apiKey": MONGO_KEY,
         "Content-Type": "application/json",
@@ -103,3 +87,32 @@ def upload_json(json_data):
 
     response = requests.request("POST", url, headers=headers, json=payload)
     return response
+
+def check_exists(data):
+    url = f"https://data.mongodb-api.com/app/data-wpkwm/endpoint/data/v1/action/findOne"
+    headers = {
+        "apiKey": MONGO_KEY,
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    }
+
+    payload = {
+        "dataSource": "USC-AnnMedia-WebTeam",
+        "database": "dps",
+        "collection": "dps-json",
+        "filter": {
+            "Event#": data[0].get("Event#")
+        },
+        "projection": {
+            "status": 1,
+            "text": 1
+        }
+    }
+
+    response = requests.request("POST", url, headers=headers, json=payload)
+    #if response is 200 then return true else return false
+    if response.status_code== 200:
+        return True
+    else:
+        return False
+    
