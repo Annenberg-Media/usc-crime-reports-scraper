@@ -3,7 +3,7 @@ import typing
 from pathlib import Path
 import json
 import requests
-from parse import read_and_parse
+from . import parse
 from decouple import config
 from rich import print
 
@@ -47,7 +47,7 @@ def upload_pdf(
     assert pdf_path.exists()
 
     # Parse the PDF to JSON
-    json_data = read_and_parse(pdf_path)
+    json_data = parse.read_and_parse(pdf_path)
     data = json.loads(json_data)
 
     #Check if document exists in MongoDB
@@ -62,7 +62,6 @@ def upload_pdf(
     else:
         print(f"Uploading {pdf_path}")
     try:
-        json_data = read_and_parse(pdf_path)
         upload_json(data)
     except APIError as e:
         if verbose:
