@@ -83,6 +83,7 @@ def upload_json(data):
     }
 
     response = requests.request("POST", url, headers=headers, json=payload)
+    print("UPLOAD STATUS CODE: ", response.status_code)
     return response
 
 def check_exists(data):
