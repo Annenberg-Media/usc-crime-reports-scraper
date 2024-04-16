@@ -4,6 +4,7 @@ from pathlib import Path
 import json
 import requests
 from parse import read_and_parse
+from decouple import config
 from rich import print
 from documentcloud import DocumentCloud
 from documentcloud.exceptions import APIError
@@ -74,11 +75,31 @@ def upload_pdf(
         # )
 
         # return document.canonical_url, True
-        json_data = parse.read_and_parse(pdf_path)
-        ##upload_json(json_data)
+        json_data = read_and_parse(pdf_path)
+        upload_json(json_data)
     except APIError as e:
         if verbose:
             print(f"API error {e}")
         return None, False
     
-##def upload_json(json_data):
+def upload_json(json_data):
+    url = f"https://data.mongodb-api.com/app/data-wpkwm/endpoint/data/v1/action/insertMany"
+    data = json.loads(json_data)
+    MONGO_KEY = os.getenv("MONGO_KEY")
+    assert MONGO_KEY
+    # print(MONGO_KEY)
+    headers = {
+        "apiKey": MONGO_KEY,
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+    }
+
+    payload = {
+        "dataSource": "USC-AnnMedia-WebTeam",
+        "database": "dps",
+        "collection": "dps-json",
+        "documents": data,
+    }
+
+    response = requests.request("POST", url, headers=headers, json=payload)
+    return response

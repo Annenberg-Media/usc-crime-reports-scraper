@@ -5,7 +5,9 @@ from decouple import config
 
 url = f"https://data.mongodb-api.com/app/data-wpkwm/endpoint/data/v1/action/insertMany"
 print("PARSING CSV TO JSON")
-json_data = read_and_parse("./031924.pdf'")
+json_data = read_and_parse("./031924.pdf")
+json_data = json.loads(json_data)
+#print("JSON DATA TYPE: ", type(json_data))
 print("JSON DATA: ")
 print(json_data)
 
