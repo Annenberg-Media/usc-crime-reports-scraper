@@ -27,7 +27,7 @@ jobs:
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --python=`which python`
+        run: pipenv install pypdf --python=`which python` 
         shell: bash
 
       - id: scrape-and-upload
