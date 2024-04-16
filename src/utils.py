@@ -6,8 +6,7 @@ import requests
 from parse import read_and_parse
 from decouple import config
 from rich import print
-from documentcloud import DocumentCloud
-from documentcloud.exceptions import APIError
+
 
 # Set directories we'll use all over
 THIS_DIR = Path(__file__).parent.absolute()
@@ -37,7 +36,7 @@ def download_url(url: str, output_path: Path, timeout: int = 180):
 def upload_pdf(
     pdf_name: str, verbose: bool = False
 ) -> tuple[typing.Optional[str], bool]:
-    """Upload the provided object's PDF to DocumentCloud.
+    """Upload the provided object's PDF to MongoDB.
 
     Returns tuple with document URL and boolean indicating if it was uploaded.
     """
