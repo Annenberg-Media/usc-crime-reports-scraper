@@ -4,7 +4,6 @@ from pathlib import Path
 import json
 import requests
 from . import parse
-from decouple import config
 from rich import print
 
 
