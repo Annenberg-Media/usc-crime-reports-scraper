@@ -50,8 +50,9 @@ def upload_pdf(
     data = json.loads(json_data)
 
     #Check if document exists in MongoDB
-    exists = check_exists(data)
-
+    #DISABLE CHECK FOR TESTING|
+    #exists = check_exists(data)
+    exists = False
     # If it is, we're done
     if exists:
         print(f"{pdf_name} already uploaded")
@@ -78,12 +79,13 @@ def upload_json(data):
     payload = {
         "dataSource": "USC-AnnMedia-WebTeam",
         "database": "dps",
-        "collection": "dps-json",
+        "collection": "dps-test",
         "documents": data,
     }
-
+    
     response = requests.request("POST", url, headers=headers, json=payload)
     print("UPLOAD STATUS CODE: ", response.status_code)
+    print("UPLOAD RESPONSE: ", response.json())
     return response
 
 def check_exists(data):
