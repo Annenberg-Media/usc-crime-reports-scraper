@@ -13,7 +13,7 @@ ROOT_DIR = THIS_DIR.parent
 PDF_DIR = ROOT_DIR / "pdfs"
 BASE_MONGO_URL = "https://us-west-2.aws.data.mongodb-api.com/app/data-wpkwm/endpoint/data/v1"
 MONGO_KEY = os.getenv("MONGO_KEY")
-COLLECTION_NAME = os.getenv("COLLECTION_NAME")
+COLLECTION_NAME = os.getenv("COLLECTION_NAME", "dps-json")
 assert MONGO_KEY
 
 def format_pdf_url(dt):
@@ -70,6 +70,7 @@ def upload_pdf(
         return None, False
     
 def upload_json(data):
+    print("uploading to ", COLLECTION_NAME)
     url = f"{BASE_MONGO_URL}/action/insertMany"
     headers = {
         "apiKey": MONGO_KEY,
@@ -90,6 +91,7 @@ def upload_json(data):
     return response
 
 def check_exists(data):
+    print("checking if document exists in ", COLLECTION_NAME)
     url = f"{BASE_MONGO_URL}/action/findOne"
     headers = {
         "apiKey": MONGO_KEY,
