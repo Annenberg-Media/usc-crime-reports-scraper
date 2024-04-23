@@ -92,7 +92,7 @@ def upload_json(data):
     return response
 
 def check_exists(data):
-    print("checking if document exists in ", COLLECTION_NAME)
+    print("checking if document exists in ", COLLECTION_NAME, "with Event# ", data[0].get("Event#"))
     url = f"{BASE_MONGO_URL}/action/findOne"
     headers = {
         "apiKey": MONGO_KEY,
@@ -112,7 +112,6 @@ def check_exists(data):
             "text": 1
         }
     }
-
     response = requests.request("POST", url, headers=headers, json=payload)
     print("CHECK STATUS CODE: ", response.status_code)
     #if response is 200 then return true else return false
