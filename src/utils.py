@@ -13,6 +13,7 @@ ROOT_DIR = THIS_DIR.parent
 PDF_DIR = ROOT_DIR / "pdfs"
 BASE_MONGO_URL = "https://us-west-2.aws.data.mongodb-api.com/app/data-wpkwm/endpoint/data/v1"
 MONGO_KEY = os.getenv("MONGO_KEY")
+COLLECTION_NAME = os.getenv("COLLECTION_NAME")
 assert MONGO_KEY
 
 def format_pdf_url(dt):
@@ -79,7 +80,7 @@ def upload_json(data):
     payload = {
         "dataSource": "USC-AnnMedia-WebTeam",
         "database": "dps",
-        "collection": "dps-json",
+        "collection": COLLECTION_NAME,
         "documents": data,
     }
     
@@ -99,7 +100,7 @@ def check_exists(data):
     payload = {
         "dataSource": "USC-AnnMedia-WebTeam",
         "database": "dps",
-        "collection": "dps-json",
+        "collection": COLLECTION_NAME,
         "filter": {
             "Event#": data[0].get("Event#")
         },
