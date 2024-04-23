@@ -11,7 +11,7 @@ from rich import print
 THIS_DIR = Path(__file__).parent.absolute()
 ROOT_DIR = THIS_DIR.parent
 PDF_DIR = ROOT_DIR / "pdfs"
-
+BASE_MONGO_URL = "https://us-west-2.aws.data.mongodb-api.com/app/data-wpkwm/endpoint/data/v1"
 MONGO_KEY = os.getenv("MONGO_KEY")
 assert MONGO_KEY
 
@@ -69,7 +69,7 @@ def upload_pdf(
         return None, False
     
 def upload_json(data):
-    url = f"https://data.mongodb-api.com/app/data-wpkwm/endpoint/data/v1/action/insertMany"
+    url = f"{BASE_MONGO_URL}/action/insertMany"
     headers = {
         "apiKey": MONGO_KEY,
         "Content-Type": "application/json",
@@ -89,7 +89,7 @@ def upload_json(data):
     return response
 
 def check_exists(data):
-    url = f"https://data.mongodb-api.com/app/data-wpkwm/endpoint/data/v1/action/findOne"
+    url = f"{BASE_MONGO_URL}/action/findOne"
     headers = {
         "apiKey": MONGO_KEY,
         "Content-Type": "application/json",
