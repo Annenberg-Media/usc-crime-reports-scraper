@@ -13,7 +13,8 @@ ROOT_DIR = THIS_DIR.parent
 PDF_DIR = ROOT_DIR / "pdfs"
 BASE_MONGO_URL = "https://us-west-2.aws.data.mongodb-api.com/app/data-wpkwm/endpoint/data/v1"
 MONGO_KEY = os.getenv("MONGO_KEY")
-COLLECTION_NAME = os.getenv("COLLECTION_NAME", "dps-json")
+COLLECTION_NAME = os.getenv("COLLECTION_NAME", 'dps-json')
+assert COLLECTION_NAME
 assert MONGO_KEY
 
 def format_pdf_url(dt):
