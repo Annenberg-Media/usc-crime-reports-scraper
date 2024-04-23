@@ -115,7 +115,7 @@ def check_exists(data):
     response = requests.request("POST", url, headers=headers, json=payload)
     print("CHECK STATUS CODE: ", response.status_code)
     #if response is 200 then return true else return false
-    if response.status_code == 200:
+    if response.status_code == 200 and response.json().get("document") is not None:
         return True
     else:
         return False
