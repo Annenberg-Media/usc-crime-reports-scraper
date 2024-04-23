@@ -36,8 +36,6 @@ jobs:
         shell: bash
         env:
           MONGO_KEY: ${{ secrets.MONGO_KEY }}
-          COLLECTION_NAME: ${{ secrets.COLLECTION_NAME }}
-
       - id: commit
         name: Commit
         run: |
