@@ -35,7 +35,7 @@ def find_next_line(start,length,curr_index,string,next_line_number):
 
 def remove_space_in_obj(obj):
     for k in obj.keys():
-        obj[k]=obj[k].strip()
+        obj[k]=re.sub("\s\s+"," ",obj[k].strip())
     return obj
 
 def extract_row(row,line_number,next_line):
